@@ -16,6 +16,10 @@ REQUEST_TIMEOUT = 10
 SENSITIVE_HEADERS = {"set-cookie", "authorization", "proxy-authorization", "cookie"}
 
 
+# The set above names the headers that must never print, but the masker
+# below ignores the distinction and masks every value it is given. That is
+# wider than the set requires, and I keep it that way: a header I did not
+# think of cannot leak through a list I forgot to extend.
 def masked_header_log(headers):
     lines = []
     for name in headers:
@@ -88,6 +92,9 @@ def analyze_headers(headers):
         "Permissions-Policy": "Missing. This restricts the use of browser features like camera and microphone."
     }
 
+    # Presence is tested against the response header mapping, which for a
+    # requests response ignores case. A header sent as x-frame-options in
+    # lower case counts as present here, as it should.
     for header, message in recommendations.items():
         if header not in headers:
             vulnerabilities.append({"header": header, "issue": message})
@@ -102,6 +109,9 @@ def analyze_headers(headers):
     if csp is not None:
         lowered = csp.lower()
         tokens = re.split(r"[\s;]+", lowered)
+        # The elif means a policy with both problems reports only the
+        # unsafe one. The wildcard finding is not hidden on purpose, it is
+        # queued behind the worse problem in the same header.
         if "'unsafe-inline'" in lowered or "'unsafe-eval'" in lowered:
             vulnerabilities.append({"header": "Content-Security-Policy",
                                     "issue": "Present, but it allows unsafe-inline or unsafe-eval, which weakens its XSS protection."})
@@ -175,6 +185,9 @@ def main():
     else:
         report_lines.append("No security vulnerabilities detected in the headers.")
 
+    # Findings never change the exit code. A completed analysis returns 0
+    # whether the list above is empty or long; 1 is kept for the runs
+    # where no analysis happened at all.
     for line in report_lines:
         logging.info(line)
 
