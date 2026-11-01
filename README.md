@@ -2,7 +2,7 @@
 
 ### Project Description
 
-vuln-Security-Header-Analyzer is a tool designed to analyze HTTP response headers for potential security vulnerabilities. It's a valuable asset for assessing the security posture of web applications by performing comprehensive scans and generating detailed reports.
+vuln-Security-Header-Analyzer is a tool designed to analyze HTTP response headers for potential security vulnerabilities. It checks whether each security header is present, and it also judges the values of the headers whose posture is value defined: X-Frame-Options must be DENY or SAMEORIGIN, Content-Security-Policy must not allow unsafe-inline, unsafe-eval, or a wildcard source, Strict-Transport-Security must carry a non-zero max-age, and X-Content-Type-Options must be nosniff. Headers are analyzed on every response received, including error responses. Verbose mode logs header names with masked values only, so cookie and authorization values are never printed in clear.
 
 ### Installation Instructions
 
