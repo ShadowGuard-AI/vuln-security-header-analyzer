@@ -8,11 +8,11 @@ vuln-Security-Header-Analyzer is a tool designed to analyze HTTP response header
 
 1. Clone the repository:
    ```
-   git clone https://github.com/ShadowStrikeHQ/vuln-Security-Header-Analyzer.git
+   git clone https://github.com/ShadowGuard-AI/vuln-security-header-analyzer.git
    ```
 2. Navigate to the project directory:
    ```
-   cd vuln-Security-Header-Analyzer
+   cd vuln-security-header-analyzer
    ```
 3. Install the required dependencies:
    ```
@@ -38,6 +38,14 @@ python main.py <URL> --user-agent "MyCustomUserAgent"
 ```
 python main.py <URL> --max-redirects 10
 ```
+
+**Example with Verbose Logging (header values are logged masked only):**
+
+```
+python main.py <URL> --verbose
+```
+
+The URL must start with http:// or https://. The tool exits with status 1 when the target could not be reached and no analysis was performed, and with status 0 for a completed analysis whether or not findings were reported.
 
 **Example with Output File Path:**
 

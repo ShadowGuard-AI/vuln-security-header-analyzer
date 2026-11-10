@@ -154,6 +154,9 @@ def main():
         return 1
 
     url = args.url
+    if not url.lower().startswith(("http://", "https://")):
+        logging.error("Invalid input: URL must start with http:// or https://")
+        return 1
     logging.info(f"Starting analysis for URL: {url}")
 
     request_headers = {}
